@@ -4,7 +4,8 @@
 
 import unittest
 
-from sample.simple import add_one
+from idxanalysis.simple import add_one
+from idxanalysis import main
 
 
 class TestSimple(unittest.TestCase):
@@ -14,4 +15,5 @@ class TestSimple(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    # unittest.main()
+    main()

@@ -1,0 +1,448 @@
+SET
+    @HORIZON := 5;
+
+SET
+    @VAL_RATIO := 0.2;
+
+SET
+    @EPSILON := 0.00000001;
+
+SET
+    @INDEX_NAME := "IDX80";
+
+DELETE FROM
+    stock_profiles
+WHERE
+    stock_code IN (
+        SELECT
+            stock_profile
+        FROM
+            stock_data
+        GROUP BY
+            stock_profile
+        HAVING
+            MAX(timestamp) != (
+                SELECT
+                    MAX(timestamp)
+                FROM
+                    stock_data
+            )
+    );
+
+SELECT
+    @MIN_DATE := MIN(timestamp)
+FROM
+    (
+        SELECT
+            DISTINCT timestamp
+        FROM
+            stock_data
+        ORDER BY
+            timestamp DESC
+        LIMIT
+            500
+    ) t;
+
+DROP TABLE IF EXISTS market_base;
+
+CREATE TEMPORARY TABLE market_base AS WITH index_base AS (
+    SELECT
+        timestamp,
+        CASE
+            WHEN highest = lowest THEN 0.5
+            ELSE (close - lowest) / (highest - lowest)
+        END AS idx_close_pos,
+        highest,
+        lowest,
+        value AS idx_value
+    FROM
+        index_data
+    WHERE
+        index_profile = @INDEX_NAME
+        AND timestamp >= @MIN_DATE
+),
+currency_exchange_base AS (
+    SELECT
+        timestamp,
+        (secondary_value / primary_value) AS currency_exchange_rate
+    FROM
+        currency_exchange_rates
+    WHERE
+        primary_code = "USD"
+        AND secondary_code = "IDR"
+),
+merged_timestamp_base AS (
+    SELECT
+        ib.*,
+        ceb.currency_exchange_rate
+    FROM
+        index_base ib
+        INNER JOIN currency_exchange_base ceb ON ib.timestamp = ceb.timestamp
+),
+base AS (
+    SELECT
+        timestamp,
+        idx_value,
+        -- Index features
+        idx_close_pos,
+        (highest - lowest) / LAG(idx_value, 1) OVER w20 AS idx_range,
+        LN(idx_value / LAG(idx_value, 1) OVER w20) AS idx_ret_1d,
+        LN(idx_value / LAG(idx_value, 5) OVER w20) AS idx_ret_5d,
+        LN(idx_value / LAG(idx_value, 20) OVER w20) AS idx_ret_20d,
+        LN(idx_value / LAG(idx_value, 60) OVER w60) AS idx_ret_60d,
+        (idx_value / MAX(idx_value) OVER w20) - 1 AS idx_drawdown_20d,
+        (idx_value / MAX(idx_value) OVER w60) - 1 AS idx_drawdown_60d,
+        -- Currency features
+        LN(
+            currency_exchange_rate / LAG(currency_exchange_rate, 1) OVER w20
+        ) AS currency_exchange_rate_ret_1d,
+        LN(
+            currency_exchange_rate / LAG(currency_exchange_rate, 5) OVER w20
+        ) AS currency_exchange_rate_ret_5d,
+        LN(
+            currency_exchange_rate / LAG(currency_exchange_rate, 20) OVER w20
+        ) AS currency_exchange_rate_ret_20d,
+        LN(
+            currency_exchange_rate / LAG(currency_exchange_rate, 60) OVER w60
+        ) AS currency_exchange_rate_ret_60d
+    FROM
+        merged_timestamp_base WINDOW w20 AS (
+            ORDER BY
+                timestamp ROWS BETWEEN 19 PRECEDING
+                AND CURRENT ROW
+        ),
+        w60 AS (
+            ORDER BY
+                timestamp ROWS BETWEEN 59 PRECEDING
+                AND CURRENT ROW
+        )
+),
+window_base AS (
+    SELECT
+        *,
+        LN(STDDEV_SAMP(idx_ret_1d) OVER w20) AS idx_vol_20d,
+        LN(STDDEV_SAMP(idx_ret_1d) OVER w60) AS idx_vol_60d,
+        AVG(idx_ret_1d) OVER w20 AS idx_ret_ma_20d,
+        AVG(idx_ret_1d) OVER w60 AS idx_ret_ma_60d,
+        LN(
+            STDDEV_SAMP(currency_exchange_rate_ret_1d) OVER w20
+        ) AS currency_exchange_rate_vol_20d,
+        LN(
+            STDDEV_SAMP(currency_exchange_rate_ret_1d) OVER w60
+        ) AS currency_exchange_rate_vol_60d,
+        AVG(currency_exchange_rate_ret_1d) OVER w20 AS currency_exchange_rate_ma_20d,
+        AVG(currency_exchange_rate_ret_1d) OVER w60 AS currency_exchange_rate_ma_60d
+    FROM
+        base WINDOW w20 AS (
+            ORDER BY
+                timestamp ROWS BETWEEN 19 PRECEDING
+                AND CURRENT ROW
+        ),
+        w60 AS (
+            ORDER BY
+                timestamp ROWS BETWEEN 59 PRECEDING
+                AND CURRENT ROW
+        )
+)
+SELECT
+    *
+FROM
+    window_base
+WHERE
+    idx_ret_60d IS NOT NULL;
+
+DROP TABLE IF EXISTS stock_base;
+
+CREATE TEMPORARY TABLE stock_base AS WITH base as (
+    SELECT
+        stock_profile,
+        timestamp,
+        close,
+        -- derived features
+        CASE
+            WHEN bid_volume + offer_volume != 0 THEN 1
+            ELSE 0
+        END AS is_active,
+        CASE
+            WHEN SUM(bid_volume + offer_volume) OVER w5 != 0 THEN 1
+            ELSE 0
+        END AS is_active_5d,
+        LN(
+            1 + (
+                CASE
+                    WHEN tradeble_shares != 0 THEN volume / tradeble_shares
+                    ELSE 0
+                END
+            )
+        ) AS turnover,
+        CASE
+            WHEN volume != 0 THEN (foreign_buy - foreign_sell) / volume
+            ELSE 0
+        END AS foreign_flow,
+        CASE
+            WHEN bid_volume + offer_volume != 0 THEN (bid_volume - offer_volume) / (bid_volume + offer_volume)
+            ELSE 0
+        END AS order_imbalance,
+        CASE
+            WHEN offer + bid != 0 THEN (offer - bid) / ((offer + bid) / 2)
+            ELSE 0
+        END AS relative_spread,
+        CASE
+            WHEN volume != 0 THEN non_regular_volume / volume
+            ELSE 0
+        END AS non_regular_activity,
+        -- returns
+        LN((close / LAG(close, 1) OVER w20)) AS ret_1d,
+        LN((close / LAG(close, 5) OVER w20)) AS ret_5d,
+        LN((close / LAG(close, 20) OVER w20)) AS ret_20d,
+        LN((close / LAG(close, 60) OVER w60)) AS ret_60d,
+        -- time data
+        SIN(2 * PI() * DAYOFWEEK(timestamp) / 7) AS dow_sin,
+        COS(2 * PI() * DAYOFWEEK(timestamp) / 7) AS dow_cos,
+        SIN(2 * PI() * WEEKOFYEAR(timestamp) / 52) AS woy_sin,
+        COS(2 * PI() * WEEKOFYEAR(timestamp) / 52) AS woy_cos,
+        SIN(2 * PI() * MONTH(timestamp) / 12) AS month_sin,
+        COS(2 * PI() * MONTH(timestamp) / 12) AS month_cos,
+        -- price action
+        (
+            CASE
+                WHEN open_price = 0
+                AND previous != 0 THEN previous
+                ELSE open_price
+            END - previous
+        ) / NULLIF(previous, 0) AS gap,
+        (high - low) / NULLIF(previous, 0) AS intraday_range,
+        CASE
+            WHEN high != low THEN (close - low) / NULLIF(high - low, 0)
+            ELSE 0.5
+        END AS close_position
+    FROM
+        stock_data
+    WHERE
+        timestamp >= @MIN_DATE
+        AND stock_profile IN (
+            SELECT
+                stock_code
+            FROM
+                index_stock
+            WHERE
+                index_code = @INDEX_NAME
+        ) WINDOW w5 AS (
+            PARTITION BY stock_profile
+            ORDER BY
+                timestamp ROWS BETWEEN 4 PRECEDING
+                AND CURRENT ROW
+        ),
+        w20 AS (
+            PARTITION BY stock_profile
+            ORDER BY
+                timestamp ROWS BETWEEN 19 PRECEDING
+                AND CURRENT ROW
+        ),
+        w60 AS (
+            PARTITION BY stock_profile
+            ORDER BY
+                timestamp ROWS BETWEEN 59 PRECEDING
+                AND CURRENT ROW
+        )
+),
+window_base AS (
+    SELECT
+        *,
+        (close / MAX(close) OVER w20) - 1 AS drawdown_20d,
+        (close / MAX(close) OVER w60) - 1 AS drawdown_60d,
+        LN(STDDEV_SAMP(ret_1d) OVER w20 + @EPSILON) AS vol_20d,
+        LN(STDDEV_SAMP(ret_1d) OVER w60 + @EPSILON) AS vol_60d,
+        AVG(ret_1d) OVER w20 AS ret_ma_20d,
+        AVG(ret_1d) OVER w60 AS ret_ma_60d
+    FROM
+        base WINDOW w20 AS (
+            PARTITION BY stock_profile
+            ORDER BY
+                timestamp ROWS BETWEEN 19 PRECEDING
+                AND CURRENT ROW
+        ),
+        w60 AS (
+            PARTITION BY stock_profile
+            ORDER BY
+                timestamp ROWS BETWEEN 59 PRECEDING
+                AND CURRENT ROW
+        )
+)
+SELECT
+    wb.*,
+    PERCENT_RANK() OVER (
+        PARTITION BY timestamp
+        ORDER BY
+            wb.turnover
+    ) AS turnover_rank,
+    PERCENT_RANK() OVER (
+        PARTITION BY timestamp
+        ORDER BY
+            wb.foreign_flow
+    ) AS foreign_flow_rank,
+    PERCENT_RANK() OVER (
+        PARTITION BY timestamp
+        ORDER BY
+            wb.order_imbalance
+    ) AS order_imbalance_rank,
+    PERCENT_RANK() OVER (
+        PARTITION BY timestamp
+        ORDER BY
+            wb.relative_spread
+    ) AS relative_spread_rank,
+    PERCENT_RANK() OVER (
+        PARTITION BY timestamp
+        ORDER BY
+            wb.non_regular_activity
+    ) AS non_regular_activity_rank,
+    PERCENT_RANK() OVER (
+        PARTITION BY timestamp
+        ORDER BY
+            wb.intraday_range
+    ) AS intraday_range_rank,
+    PERCENT_RANK() OVER (
+        PARTITION BY timestamp
+        ORDER BY
+            wb.gap
+    ) AS gap_rank,
+    mb.idx_value,
+    mb.idx_close_pos,
+    mb.idx_range,
+    mb.idx_ret_1d,
+    mb.idx_ret_5d,
+    mb.idx_ret_20d,
+    mb.idx_ret_60d,
+    mb.currency_exchange_rate_ret_1d,
+    mb.currency_exchange_rate_ret_5d,
+    mb.currency_exchange_rate_ret_20d,
+    mb.currency_exchange_rate_ret_60d,
+    mb.idx_vol_20d,
+    mb.idx_vol_60d,
+    mb.idx_ret_ma_20d,
+    mb.idx_ret_ma_60d,
+    mb.idx_drawdown_20d,
+    mb.idx_drawdown_60d,
+    mb.currency_exchange_rate_vol_20d,
+    mb.currency_exchange_rate_vol_60d,
+    mb.currency_exchange_rate_ma_20d,
+    mb.currency_exchange_rate_ma_60d
+FROM
+    window_base wb
+    INNER JOIN market_base mb ON wb.timestamp = mb.timestamp
+WHERE
+    wb.ret_60d IS NOT NULL;
+
+DROP TABLE IF EXISTS model_target;
+
+CREATE TEMPORARY TABLE model_target AS WITH base AS (
+    SELECT
+        stock_profile,
+        timestamp,
+        COUNT(*) OVER (PARTITION BY stock_profile) as total_step,
+        (
+            LN(
+                LEAD(close, @HORIZON) OVER (
+                    PARTITION BY stock_profile
+                    ORDER BY
+                        timestamp
+                ) / close
+            ) - LN(
+                LEAD(idx_value, @HORIZON) OVER (
+                    PARTITION BY stock_profile
+                    ORDER BY
+                        timestamp
+                ) / idx_value
+            )
+        ) / (vol_20d * 0.5) AS raw_target
+    FROM
+        stock_base
+),
+ranked_base AS (
+    SELECT
+        stock_profile,
+        timestamp,
+        total_step,
+        raw_target,
+        PERCENT_RANK() OVER (
+            PARTITION BY timestamp
+            ORDER BY
+                raw_target
+        ) as cross_sectional_rank
+    FROM
+        base
+    WHERE
+        raw_target IS NOT NULL
+)
+SELECT
+    stock_profile,
+    timestamp,
+    total_step,
+    CAST(ROUND(cross_sectional_rank * 100) AS UNSIGNED) AS future_target
+FROM
+    ranked_base rb
+WHERE
+    ROUND(total_step * @VAL_RATIO) > (@HORIZON + 1);
+
+DROP TABLE IF EXISTS stock_merged;
+
+CREATE TEMPORARY TABLE stock_merged AS
+SELECT
+    sb.*,
+    ROW_NUMBER() OVER (
+        PARTITION BY sb.stock_profile
+        ORDER BY
+            sb.timestamp DESC
+    ) AS step_count,
+    COUNT(*) OVER (PARTITION BY sb.stock_profile) as total_step,
+    mt.future_target
+FROM
+    stock_base sb
+    INNER JOIN model_target mt ON sb.timestamp = mt.timestamp
+    AND sb.stock_profile = mt.stock_profile;
+
+SELECT
+    @STOCK_RETURN_MIN_TOTAL_STEP := MIN(total_step)
+FROM
+    stock_merged;
+
+DROP TABLE IF EXISTS stock_train;
+
+DROP TABLE IF EXISTS stock_val;
+
+CREATE TABLE stock_train AS
+SELECT
+    *
+FROM
+    stock_merged
+WHERE
+    step_count > ROUND(@STOCK_RETURN_MIN_TOTAL_STEP * @VAL_RATIO, 0);
+
+CREATE TABLE stock_val AS
+SELECT
+    *
+FROM
+    stock_merged
+WHERE
+    step_count <= ROUND(@STOCK_RETURN_MIN_TOTAL_STEP * @VAL_RATIO, 0);
+
+DROP TABLE IF EXISTS stock_inference;
+
+CREATE TABLE stock_inference AS WITH base AS (
+    SELECT
+        *,
+        ROW_NUMBER() OVER (
+            PARTITION BY stock_profile
+            ORDER BY
+                timestamp
+        ) AS step_count,
+        COUNT(*) OVER (PARTITION BY stock_profile) as total_step
+    FROM
+        stock_base
+)
+SELECT
+    *
+FROM
+    base
+WHERE
+    step_count = total_step;
