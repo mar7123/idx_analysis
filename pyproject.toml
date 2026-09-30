@@ -126,7 +126,8 @@ dependencies = [
   "lightgbm",
   "scikit-learn",
   "keras",
-  "pydantic"
+  "pydantic",
+  "undetected-chromedriver"
 ]
 
 # List additional groups of dependencies here (e.g. development

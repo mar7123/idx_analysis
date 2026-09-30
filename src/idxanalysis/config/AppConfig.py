@@ -28,10 +28,8 @@ class __AppConfig:
     SCRAPE_STOCK_URL = "https://www.idx.co.id/primary/TradingSummary/GetStockSummary"
     SCRAPE_INDEX_STOCK_URL = "https://idx.co.id/secondary/get/StockData/GetStockUploader"
     SCRAPE_HEADERS = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
         "Referer": "https://www.idx.co.id/",
     }
-    SCRAPE_COOKIE_CF_CLEARANCE = "_NfKM4SldP7XOrEhnWDvS3Ly7CMJm6s5evbgLy6XdAE-1790759451-1.2.1.1-3dpZMSe4a_M0PeqKApr0qurIq8.cvJRB4om7JNxVKWusy8fMwkLFt1X7fHjFBALqLkRkBGD.M_4zTPY4cpYBoVvqY5V6CTFjuENlNTEdlokc5BTdUu8oYqRx__hURplZTd4PpsdJEEEEHCeB4mjimR9NsyveEE4r.EDd18jwCwyyGSKE_mSN0ZS9CrhNGdYp9a23knylmYNO4PbpZibmRibIM42cCF6rMmILVoK3H.ordJ0BjiTE1F.70JkDXhUPgrh7cLavBcoBetqxelwfVdjpN8ZlOHg9hBabNjlYx2RbJlNY8vPtO3Fzqr3tIASZgOmRghTHcjPZGNgq0bRcphgURiBlrGTokP4NtxeK_z3yIq2sLKcTVccyVn.VM4DKeMoG2optZRvClMFqxyXphY.Otxbm0XUSZZtDLO9YDeEjAD8I9c_APX8WN_L0TsLyHx.xg1AsrmFyghLIhLQhn7E28WyR1d6CGGfOBItLTyrSJ17QSBlrgjFuqT0iZcSMMc8nmlWahfxnMK7sZwW7kg"
 
     def currency_exchange_rates_url(self, oldest_date: str, latest_date: str):
         return f"https://api.frankfurter.dev/v1/{oldest_date}..{latest_date}"
