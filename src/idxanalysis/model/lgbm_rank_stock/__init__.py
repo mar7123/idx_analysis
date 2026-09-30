@@ -68,9 +68,9 @@ def main():
     result_df["score_std"] = result_df[[
         f'result_score{i}' for i in range(num_train)]].std(axis=1)
     
-    output_path = appConfig.model_output_dir
+    output_path = appConfig.MODEL_OUTPUT_DIR
     output_path.mkdir(parents=True, exist_ok=True)
-    with pd.ExcelWriter(appConfig.lgbm_rank_stock_output_path, engine="openpyxl") as writer:
+    with pd.ExcelWriter(appConfig.LGBM_RANK_STOCK_OUTPUT_PATH, engine="openpyxl") as writer:
         result_df.to_excel(  # type: ignore
             writer, sheet_name="result_df", index=False)
         val_metric_df.to_excel(  # type: ignore

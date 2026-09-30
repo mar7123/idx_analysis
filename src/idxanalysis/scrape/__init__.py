@@ -38,7 +38,7 @@ def scrape_index_stock(session: requests.Session):
                 "locale": "id",
             }
             index_stock_response = session.get(
-                appConfig. INDEX_STOCK_URL, params=params, impersonate="chrome124")
+                appConfig.SCRAPE_INDEX_STOCK_URL, params=params)
             LogUtils.append_log(index_stock_response.url)
             if index_stock_response.status_code != 200:
                 LogUtils.append_log(
@@ -60,7 +60,7 @@ def scrape_index_stock(session: requests.Session):
 
         rand_sleep()
 
-    index_stock_extract_path = appConfig.scrape_index_stock_zip_dir
+    index_stock_extract_path = appConfig.SCRAPE_INDEX_STOCK_ZIP_DIR
     zip_tmp_file = index_stock_extract_path / "temp_downloaded_file.zip"
     index_stock_extract_path.mkdir(parents=True, exist_ok=True)
 
@@ -68,7 +68,7 @@ def scrape_index_stock(session: requests.Session):
         index_stock_report_url = appConfig.index_stock_report_url(
             index_stock_report_path)
         index_stock_report_zip_response = session.get(
-            index_stock_report_url, impersonate="chrome124")
+            index_stock_report_url)
         LogUtils.append_log(index_stock_report_zip_response.url)
         if index_stock_report_zip_response.status_code != 200:
             LogUtils.append_log(
@@ -180,8 +180,13 @@ def main():
     time_dimension_dates = timeDimensionRepository.getTimeDimensions()
     filtered_dates = sorted(all_dates - set(time_dimension_dates))
 
-    session = requests.Session()
-    session.headers.update(appConfig.SCRAPE_IDX_HEADERS)
+    session = requests.Session(impersonate="chrome124")
+    session.headers.update(appConfig.SCRAPE_HEADERS)
+    session.cookies.set(
+        "cf_clearance",
+        appConfig.SCRAPE_COOKIE_CF_CLEARANCE,
+        domain=".idx.co.id"
+    )
     for timestamp in filtered_dates:
         timestamp_url_param = timestamp.strftime("%Y%m%d")
         params = {
@@ -192,7 +197,7 @@ def main():
 
         # Get Index Data
         index_response = session.get(
-            appConfig.INDEX_URL, params=params, impersonate="chrome124"
+            appConfig.SCRAPE_INDEX_URL, params=params
         )
         LogUtils.append_log(index_response.url)
         if index_response.status_code != 200:
@@ -204,7 +209,7 @@ def main():
 
         # Get Stock Data
         stock_response = session.get(
-            appConfig.STOCK_URL, params=params, impersonate="chrome124"
+            appConfig.SCRAPE_STOCK_URL, params=params
         )
         LogUtils.append_log(stock_response.url)
         if stock_response.status_code != 200:
@@ -222,7 +227,7 @@ def main():
             "symbols": currencyExchangeRateRepository.secondary_currency,
         }
         currency_exchange_rate_response = session.get(
-            appConfig.currency_exchange_rates_url(oldest_date, latest_date), params=params,  headers=appConfig.SCRAPE_HEADERS, impersonate="chrome124"
+            appConfig.currency_exchange_rates_url(oldest_date, latest_date), params=params,  headers=appConfig.SCRAPE_HEADERS
         )
         LogUtils.append_log(currency_exchange_rate_response.url)
         if currency_exchange_rate_response.status_code != 200:
@@ -245,6 +250,6 @@ def main():
     # Get Index Stock
     scrape_index_stock(session)
     gc.collect()
-    shutil.rmtree(appConfig.scrape_index_stock_zip_dir)
+    shutil.rmtree(appConfig.SCRAPE_INDEX_STOCK_ZIP_DIR)
 
     LogUtils.append_log("SCRAPE END")

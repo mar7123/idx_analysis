@@ -1,17 +1,12 @@
+from datetime import datetime
 from pathlib import Path
 
 
 class __AppConfig:
-    __package_dir: Path = Path()
+    PACKAGE_DIR: Path = Path(__file__).parent.parent
 
-    def setPackageDir(self, packageDir: Path):
-        self.__package_dir = packageDir
-
+    LOG_DIR = PACKAGE_DIR.joinpath("log")
     LOG_FILE_NAME = "log.txt"
-
-    @property
-    def log_dir(self) -> Path:
-        return self.__package_dir.joinpath("log")
 
     SQL_GET_TIME_DIMENSIONS = "SELECT * from time_dimensions"
     SQL_INSERT_TIME_DIMENSIONS = "INSERT IGNORE INTO time_dimensions VALUES (:tm)"
@@ -29,25 +24,14 @@ class __AppConfig:
     SQL_LGBM_RANK_STOCK_GET_VAL = "SELECT * FROM stock_val"
 
     SCRAPE_DAY_WINDOW = 800
-    INDEX_URL = "https://www.idx.co.id/primary/TradingSummary/GetIndexSummary"
-    STOCK_URL = "https://www.idx.co.id/primary/TradingSummary/GetStockSummary"
-    INDEX_STOCK_URL = "https://idx.co.id/secondary/get/StockData/GetStockUploader"
+    SCRAPE_INDEX_URL = "https://www.idx.co.id/primary/TradingSummary/GetIndexSummary"
+    SCRAPE_STOCK_URL = "https://www.idx.co.id/primary/TradingSummary/GetStockSummary"
+    SCRAPE_INDEX_STOCK_URL = "https://idx.co.id/secondary/get/StockData/GetStockUploader"
     SCRAPE_HEADERS = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-        "Accept": "application/json, text/plain, */*",
-        "Accept-Language": "en-US,en;q=0.9,id;q=0.8",
-        "Referer": "https://www.idx.co.id/",
-        "Sec-Ch-Ua": '"Not-A.Brand";v="99", "Chromium";v="124", "Google Chrome";v="124"',
-        "Sec-Ch-Ua-Mobile": "?0",
-        "Sec-Ch-Ua-Platform": '"Windows"',
-        "Sec-Fetch-Dest": "empty",
-        "Sec-Fetch-Mode": "cors",
-        "Sec-Fetch-Site": "same-origin",
-    }
-    SCRAPE_IDX_HEADERS = {
-        **SCRAPE_HEADERS,
         "Referer": "https://www.idx.co.id/",
     }
+    SCRAPE_COOKIE_CF_CLEARANCE = "_NfKM4SldP7XOrEhnWDvS3Ly7CMJm6s5evbgLy6XdAE-1790759451-1.2.1.1-3dpZMSe4a_M0PeqKApr0qurIq8.cvJRB4om7JNxVKWusy8fMwkLFt1X7fHjFBALqLkRkBGD.M_4zTPY4cpYBoVvqY5V6CTFjuENlNTEdlokc5BTdUu8oYqRx__hURplZTd4PpsdJEEEEHCeB4mjimR9NsyveEE4r.EDd18jwCwyyGSKE_mSN0ZS9CrhNGdYp9a23knylmYNO4PbpZibmRibIM42cCF6rMmILVoK3H.ordJ0BjiTE1F.70JkDXhUPgrh7cLavBcoBetqxelwfVdjpN8ZlOHg9hBabNjlYx2RbJlNY8vPtO3Fzqr3tIASZgOmRghTHcjPZGNgq0bRcphgURiBlrGTokP4NtxeK_z3yIq2sLKcTVccyVn.VM4DKeMoG2optZRvClMFqxyXphY.Otxbm0XUSZZtDLO9YDeEjAD8I9c_APX8WN_L0TsLyHx.xg1AsrmFyghLIhLQhn7E28WyR1d6CGGfOBItLTyrSJ17QSBlrgjFuqT0iZcSMMc8nmlWahfxnMK7sZwW7kg"
 
     def currency_exchange_rates_url(self, oldest_date: str, latest_date: str):
         return f"https://api.frankfurter.dev/v1/{oldest_date}..{latest_date}"
@@ -56,13 +40,10 @@ class __AppConfig:
         return "https://idx.co.id" + \
             index_stock_report_path.replace("\\", "/")
 
-    @property
-    def scrape_index_stock_zip_dir(self) -> Path:
-        return self.__package_dir.joinpath("scrape", "stock_index_files")
+    SCRAPE_INDEX_STOCK_ZIP_DIR = PACKAGE_DIR.joinpath(
+        "scrape", "stock_index_files")
 
-    @property
-    def model_output_dir(self) -> Path:
-        return self.__package_dir.joinpath("output")
+    MODEL_OUTPUT_DIR = PACKAGE_DIR.joinpath("output")
 
     LGBM_RANK_STOCK_FEATURES = [
         # Index
@@ -88,8 +69,6 @@ class __AppConfig:
         "currency_exchange_rate_ma_20d",
         "currency_exchange_rate_ma_60d",
         # Stock
-        "is_active",
-        "is_active_5d",
         "turnover_rank",
         "foreign_flow_rank",
         "order_imbalance_rank",
@@ -116,9 +95,8 @@ class __AppConfig:
         "month_cos",
     ]
 
-    @property
-    def lgbm_rank_stock_output_path(self) -> Path:
-        return self.model_output_dir.joinpath("lgbm_rank_stock_output.xlsx")
+    LGBM_RANK_STOCK_OUTPUT_PATH = MODEL_OUTPUT_DIR.joinpath(
+        f"lgbm_rank_stock_output-{datetime.now().date()}.xlsx")
 
 
 appConfig = __AppConfig()

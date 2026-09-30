@@ -1,5 +1,5 @@
 SET
-    @HORIZON := 5;
+    @HORIZON := 3;
 
 SET
     @VAL_RATIO := 0.2;
@@ -159,14 +159,6 @@ CREATE TEMPORARY TABLE stock_base AS WITH base as (
         timestamp,
         close,
         -- derived features
-        CASE
-            WHEN bid_volume + offer_volume != 0 THEN 1
-            ELSE 0
-        END AS is_active,
-        CASE
-            WHEN SUM(bid_volume + offer_volume) OVER w5 != 0 THEN 1
-            ELSE 0
-        END AS is_active_5d,
         LN(
             1 + (
                 CASE
@@ -251,6 +243,7 @@ window_base AS (
         *,
         (close / MAX(close) OVER w20) - 1 AS drawdown_20d,
         (close / MAX(close) OVER w60) - 1 AS drawdown_60d,
+        STDDEV_SAMP(ret_1d) OVER w20 AS raw_vol_20d,
         LN(STDDEV_SAMP(ret_1d) OVER w20 + @EPSILON) AS vol_20d,
         LN(STDDEV_SAMP(ret_1d) OVER w60 + @EPSILON) AS vol_60d,
         AVG(ret_1d) OVER w20 AS ret_ma_20d,
@@ -267,6 +260,26 @@ window_base AS (
             ORDER BY
                 timestamp ROWS BETWEEN 59 PRECEDING
                 AND CURRENT ROW
+        )
+),
+max_timestamp AS (
+    SELECT
+        MAX(timestamp) AS max_tm
+    FROM
+        window_base
+),
+filtered_stocks AS (
+    SELECT
+        stock_profile
+    FROM
+        window_base
+    WHERE
+        raw_vol_20d != 0
+        AND timestamp = (
+            SELECT
+                max_tm
+            FROM
+                max_timestamp
         )
 )
 SELECT
@@ -331,7 +344,13 @@ FROM
     window_base wb
     INNER JOIN market_base mb ON wb.timestamp = mb.timestamp
 WHERE
-    wb.ret_60d IS NOT NULL;
+    wb.stock_profile IN (
+        SELECT
+            stock_profile
+        FROM
+            filtered_stocks
+    )
+    AND wb.ret_60d IS NOT NULL;
 
 DROP TABLE IF EXISTS model_target;
 
@@ -354,7 +373,7 @@ CREATE TEMPORARY TABLE model_target AS WITH base AS (
                         timestamp
                 ) / idx_value
             )
-        ) / (vol_20d * 0.5) AS raw_target
+        ) / vol_20d AS raw_target
     FROM
         stock_base
 ),
@@ -416,7 +435,9 @@ SELECT
 FROM
     stock_merged
 WHERE
-    step_count > ROUND(@STOCK_RETURN_MIN_TOTAL_STEP * @VAL_RATIO, 0);
+    step_count > (
+        ROUND(@STOCK_RETURN_MIN_TOTAL_STEP * @VAL_RATIO, 0) + @HORIZON + 1
+    );
 
 CREATE TABLE stock_val AS
 SELECT
