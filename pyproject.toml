@@ -121,13 +121,12 @@ dependencies = [
   "openpyxl",
   "sqlalchemy",
   "pymysql",
-  "curl_cffi",
   "tensorflow",
   "lightgbm",
   "scikit-learn",
   "keras",
   "pydantic",
-  "undetected-chromedriver"
+  "undetected-chromedriver",
 ]
 
 # List additional groups of dependencies here (e.g. development

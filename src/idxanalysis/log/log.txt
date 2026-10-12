@@ -1,298 +1,22 @@
-2026-10-01 02:50:22.039616 - START
-2026-10-01 02:50:22.039888 - SCRAPE START
-2026-10-01 02:50:22.138344 - Query
-SELECT * from time_dimensions
-Row Count 1065
-2026-10-01 02:50:31.580266 - https://www.idx.co.id/primary/TradingSummary/GetIndexSummary?length=9999&start=0&date=20260919
-2026-10-01 02:50:31.702778 - https://www.idx.co.id/primary/TradingSummary/GetStockSummary?length=9999&start=0&date=20260919
-2026-10-01 02:50:32.260971 - https://api.frankfurter.dev/v1/2026-09-19..2026-09-19?base=USD&symbols=IDR
-2026-10-01 02:50:32.280219 - Query
-INSERT IGNORE INTO time_dimensions VALUES (:tm)
-Row Count 1
-2026-10-01 02:50:32.290953 - Data Empty
-2026-10-01 02:50:36.660409 - https://www.idx.co.id/primary/TradingSummary/GetIndexSummary?length=9999&start=0&date=20260920
-2026-10-01 02:50:36.797497 - https://www.idx.co.id/primary/TradingSummary/GetStockSummary?length=9999&start=0&date=20260920
-2026-10-01 02:50:37.161500 - https://api.frankfurter.dev/v1/2026-09-20..2026-09-20?base=USD&symbols=IDR
-2026-10-01 02:50:37.179636 - Query
-INSERT IGNORE INTO time_dimensions VALUES (:tm)
-Row Count 1
-2026-10-01 02:50:37.185359 - Data Empty
-2026-10-01 02:50:39.976877 - https://www.idx.co.id/primary/TradingSummary/GetIndexSummary?length=9999&start=0&date=20260921
-2026-10-01 02:50:40.246606 - https://www.idx.co.id/primary/TradingSummary/GetStockSummary?length=9999&start=0&date=20260921
-2026-10-01 02:50:40.764591 - https://api.frankfurter.dev/v1/2026-09-21..2026-09-21?base=USD&symbols=IDR
-2026-10-01 02:50:40.775910 - Query
-INSERT IGNORE INTO time_dimensions VALUES (:tm)
-Row Count 1
-2026-10-01 02:50:40.800539 - Query
-INSERT IGNORE INTO index_profiles (index_code) VALUE (:index_code)
-Row Count 0
-2026-10-01 02:50:40.820125 - Query
-INSERT IGNORE INTO index_data VALUE (:index_profile, :timestamp, :previous, :highest, :lowest, :close, :number_of_stock, :change, :volume, :value, :frequency, :market_capital)
-Row Count 45
-2026-10-01 02:50:40.834835 - Query
-INSERT INTO stock_profiles VALUE (:stock_code, :stock_name, :remarks, :delisting_date) ON DUPLICATE KEY UPDATE delisting_date = delisting_date
-Row Count 963
-2026-10-01 02:50:41.291327 - Query
-INSERT IGNORE INTO stock_data VALUE (:stock_profile, :timestamp, :previous, :open_price, :first_trade, :high, :low, :close, :change, :volume, :value, :frequency, :index_individual, :offer, :offer_volume, :bid, :bid_volume, :listed_shares, :tradeble_shares, :weight_for_index, :foreign_sell, :foreign_buy, :non_regular_volume, :non_regular_value, :non_regular_frequency, :persen, :percentage)
-Row Count 963
-2026-10-01 02:50:41.299275 - Query
-INSERT IGNORE INTO currency_exchange_rates VALUES (:primary_code, :secondary_code, :primary_value, :secondary_value, :timestamp)
-Row Count 1
-2026-10-01 02:50:43.880030 - https://www.idx.co.id/primary/TradingSummary/GetIndexSummary?length=9999&start=0&date=20260922
-2026-10-01 02:50:44.142309 - https://www.idx.co.id/primary/TradingSummary/GetStockSummary?length=9999&start=0&date=20260922
-2026-10-01 02:50:44.649303 - https://api.frankfurter.dev/v1/2026-09-22..2026-09-22?base=USD&symbols=IDR
-2026-10-01 02:50:44.650801 - Query
-INSERT IGNORE INTO time_dimensions VALUES (:tm)
-Row Count 1
-2026-10-01 02:50:44.653114 - Query
-INSERT IGNORE INTO index_profiles (index_code) VALUE (:index_code)
-Row Count 0
-2026-10-01 02:50:44.656333 - Query
-INSERT IGNORE INTO index_data VALUE (:index_profile, :timestamp, :previous, :highest, :lowest, :close, :number_of_stock, :change, :volume, :value, :frequency, :market_capital)
-Row Count 45
-2026-10-01 02:50:44.665461 - Query
-INSERT INTO stock_profiles VALUE (:stock_code, :stock_name, :remarks, :delisting_date) ON DUPLICATE KEY UPDATE delisting_date = delisting_date
-Row Count 963
-2026-10-01 02:50:44.751785 - Query
-INSERT IGNORE INTO stock_data VALUE (:stock_profile, :timestamp, :previous, :open_price, :first_trade, :high, :low, :close, :change, :volume, :value, :frequency, :index_individual, :offer, :offer_volume, :bid, :bid_volume, :listed_shares, :tradeble_shares, :weight_for_index, :foreign_sell, :foreign_buy, :non_regular_volume, :non_regular_value, :non_regular_frequency, :persen, :percentage)
-Row Count 963
-2026-10-01 02:50:44.757023 - Query
-INSERT IGNORE INTO currency_exchange_rates VALUES (:primary_code, :secondary_code, :primary_value, :secondary_value, :timestamp)
-Row Count 1
-2026-10-01 02:50:49.110677 - https://www.idx.co.id/primary/TradingSummary/GetIndexSummary?length=9999&start=0&date=20260923
-2026-10-01 02:50:49.484651 - https://www.idx.co.id/primary/TradingSummary/GetStockSummary?length=9999&start=0&date=20260923
-2026-10-01 02:50:49.729859 - https://api.frankfurter.dev/v1/2026-09-23..2026-09-23?base=USD&symbols=IDR
-2026-10-01 02:50:49.731252 - Query
-INSERT IGNORE INTO time_dimensions VALUES (:tm)
-Row Count 1
-2026-10-01 02:50:49.733500 - Query
-INSERT IGNORE INTO index_profiles (index_code) VALUE (:index_code)
-Row Count 0
-2026-10-01 02:50:49.735774 - Query
-INSERT IGNORE INTO index_data VALUE (:index_profile, :timestamp, :previous, :highest, :lowest, :close, :number_of_stock, :change, :volume, :value, :frequency, :market_capital)
-Row Count 45
-2026-10-01 02:50:49.746013 - Query
-INSERT INTO stock_profiles VALUE (:stock_code, :stock_name, :remarks, :delisting_date) ON DUPLICATE KEY UPDATE delisting_date = delisting_date
-Row Count 963
-2026-10-01 02:50:49.799302 - Query
-INSERT IGNORE INTO stock_data VALUE (:stock_profile, :timestamp, :previous, :open_price, :first_trade, :high, :low, :close, :change, :volume, :value, :frequency, :index_individual, :offer, :offer_volume, :bid, :bid_volume, :listed_shares, :tradeble_shares, :weight_for_index, :foreign_sell, :foreign_buy, :non_regular_volume, :non_regular_value, :non_regular_frequency, :persen, :percentage)
-Row Count 963
-2026-10-01 02:50:49.802412 - Query
-INSERT IGNORE INTO currency_exchange_rates VALUES (:primary_code, :secondary_code, :primary_value, :secondary_value, :timestamp)
-Row Count 1
-2026-10-01 02:50:53.780075 - https://www.idx.co.id/primary/TradingSummary/GetIndexSummary?length=9999&start=0&date=20260924
-2026-10-01 02:50:53.846982 - https://www.idx.co.id/primary/TradingSummary/GetStockSummary?length=9999&start=0&date=20260924
-2026-10-01 02:50:54.371245 - https://api.frankfurter.dev/v1/2026-09-24..2026-09-24?base=USD&symbols=IDR
-2026-10-01 02:50:54.380275 - Query
-INSERT IGNORE INTO time_dimensions VALUES (:tm)
-Row Count 1
-2026-10-01 02:50:54.404473 - Query
-INSERT IGNORE INTO index_profiles (index_code) VALUE (:index_code)
-Row Count 0
-2026-10-01 02:50:54.408094 - Query
-INSERT IGNORE INTO index_data VALUE (:index_profile, :timestamp, :previous, :highest, :lowest, :close, :number_of_stock, :change, :volume, :value, :frequency, :market_capital)
-Row Count 45
-2026-10-01 02:50:54.418244 - Query
-INSERT INTO stock_profiles VALUE (:stock_code, :stock_name, :remarks, :delisting_date) ON DUPLICATE KEY UPDATE delisting_date = delisting_date
-Row Count 963
-2026-10-01 02:50:54.470205 - Query
-INSERT IGNORE INTO stock_data VALUE (:stock_profile, :timestamp, :previous, :open_price, :first_trade, :high, :low, :close, :change, :volume, :value, :frequency, :index_individual, :offer, :offer_volume, :bid, :bid_volume, :listed_shares, :tradeble_shares, :weight_for_index, :foreign_sell, :foreign_buy, :non_regular_volume, :non_regular_value, :non_regular_frequency, :persen, :percentage)
-Row Count 963
-2026-10-01 02:50:54.474297 - Query
-INSERT IGNORE INTO currency_exchange_rates VALUES (:primary_code, :secondary_code, :primary_value, :secondary_value, :timestamp)
-Row Count 1
-2026-10-01 02:50:58.098558 - https://www.idx.co.id/primary/TradingSummary/GetIndexSummary?length=9999&start=0&date=20260925
-2026-10-01 02:50:58.166836 - https://www.idx.co.id/primary/TradingSummary/GetStockSummary?length=9999&start=0&date=20260925
-2026-10-01 02:50:58.602806 - https://api.frankfurter.dev/v1/2026-09-25..2026-09-25?base=USD&symbols=IDR
-2026-10-01 02:50:58.612982 - Query
-INSERT IGNORE INTO time_dimensions VALUES (:tm)
-Row Count 1
-2026-10-01 02:50:58.616343 - Query
-INSERT IGNORE INTO index_profiles (index_code) VALUE (:index_code)
-Row Count 0
-2026-10-01 02:50:58.618476 - Query
-INSERT IGNORE INTO index_data VALUE (:index_profile, :timestamp, :previous, :highest, :lowest, :close, :number_of_stock, :change, :volume, :value, :frequency, :market_capital)
-Row Count 45
-2026-10-01 02:50:58.629721 - Query
-INSERT INTO stock_profiles VALUE (:stock_code, :stock_name, :remarks, :delisting_date) ON DUPLICATE KEY UPDATE delisting_date = delisting_date
-Row Count 963
-2026-10-01 02:50:58.703728 - Query
-INSERT IGNORE INTO stock_data VALUE (:stock_profile, :timestamp, :previous, :open_price, :first_trade, :high, :low, :close, :change, :volume, :value, :frequency, :index_individual, :offer, :offer_volume, :bid, :bid_volume, :listed_shares, :tradeble_shares, :weight_for_index, :foreign_sell, :foreign_buy, :non_regular_volume, :non_regular_value, :non_regular_frequency, :persen, :percentage)
-Row Count 963
-2026-10-01 02:50:58.707038 - Query
-INSERT IGNORE INTO currency_exchange_rates VALUES (:primary_code, :secondary_code, :primary_value, :secondary_value, :timestamp)
-Row Count 1
-2026-10-01 02:51:02.729712 - https://www.idx.co.id/primary/TradingSummary/GetIndexSummary?length=9999&start=0&date=20260926
-2026-10-01 02:51:02.850044 - https://www.idx.co.id/primary/TradingSummary/GetStockSummary?length=9999&start=0&date=20260926
-2026-10-01 02:51:03.281290 - https://api.frankfurter.dev/v1/2026-09-26..2026-09-26?base=USD&symbols=IDR
-2026-10-01 02:51:03.282683 - Query
-INSERT IGNORE INTO time_dimensions VALUES (:tm)
-Row Count 1
-2026-10-01 02:51:03.284411 - Data Empty
-2026-10-01 02:51:07.294650 - https://www.idx.co.id/primary/TradingSummary/GetIndexSummary?length=9999&start=0&date=20260927
-2026-10-01 02:51:07.409825 - https://www.idx.co.id/primary/TradingSummary/GetStockSummary?length=9999&start=0&date=20260927
-2026-10-01 02:51:07.913413 - https://api.frankfurter.dev/v1/2026-09-27..2026-09-27?base=USD&symbols=IDR
-2026-10-01 02:51:07.923155 - Query
-INSERT IGNORE INTO time_dimensions VALUES (:tm)
-Row Count 1
-2026-10-01 02:51:07.924645 - Data Empty
-2026-10-01 02:51:12.536753 - https://www.idx.co.id/primary/TradingSummary/GetIndexSummary?length=9999&start=0&date=20260928
-2026-10-01 02:51:12.611503 - https://www.idx.co.id/primary/TradingSummary/GetStockSummary?length=9999&start=0&date=20260928
-2026-10-01 02:51:13.036845 - https://api.frankfurter.dev/v1/2026-09-28..2026-09-28?base=USD&symbols=IDR
-2026-10-01 02:51:13.038512 - Query
-INSERT IGNORE INTO time_dimensions VALUES (:tm)
-Row Count 1
-2026-10-01 02:51:13.040452 - Query
-INSERT IGNORE INTO index_profiles (index_code) VALUE (:index_code)
-Row Count 0
-2026-10-01 02:51:13.043197 - Query
-INSERT IGNORE INTO index_data VALUE (:index_profile, :timestamp, :previous, :highest, :lowest, :close, :number_of_stock, :change, :volume, :value, :frequency, :market_capital)
-Row Count 45
-2026-10-01 02:51:13.053159 - Query
-INSERT INTO stock_profiles VALUE (:stock_code, :stock_name, :remarks, :delisting_date) ON DUPLICATE KEY UPDATE delisting_date = delisting_date
-Row Count 963
-2026-10-01 02:51:13.135467 - Query
-INSERT IGNORE INTO stock_data VALUE (:stock_profile, :timestamp, :previous, :open_price, :first_trade, :high, :low, :close, :change, :volume, :value, :frequency, :index_individual, :offer, :offer_volume, :bid, :bid_volume, :listed_shares, :tradeble_shares, :weight_for_index, :foreign_sell, :foreign_buy, :non_regular_volume, :non_regular_value, :non_regular_frequency, :persen, :percentage)
-Row Count 963
-2026-10-01 02:51:13.139622 - Query
-INSERT IGNORE INTO currency_exchange_rates VALUES (:primary_code, :secondary_code, :primary_value, :secondary_value, :timestamp)
-Row Count 1
-2026-10-01 02:51:16.076466 - https://www.idx.co.id/primary/TradingSummary/GetIndexSummary?length=9999&start=0&date=20260929
-2026-10-01 02:51:16.147751 - https://www.idx.co.id/primary/TradingSummary/GetStockSummary?length=9999&start=0&date=20260929
-2026-10-01 02:51:16.471547 - https://api.frankfurter.dev/v1/2026-09-29..2026-09-29?base=USD&symbols=IDR
-2026-10-01 02:51:16.481831 - Query
-INSERT IGNORE INTO time_dimensions VALUES (:tm)
-Row Count 1
-2026-10-01 02:51:16.484774 - Query
-INSERT IGNORE INTO index_profiles (index_code) VALUE (:index_code)
-Row Count 0
-2026-10-01 02:51:16.487814 - Query
-INSERT IGNORE INTO index_data VALUE (:index_profile, :timestamp, :previous, :highest, :lowest, :close, :number_of_stock, :change, :volume, :value, :frequency, :market_capital)
-Row Count 45
-2026-10-01 02:51:16.497311 - Query
-INSERT INTO stock_profiles VALUE (:stock_code, :stock_name, :remarks, :delisting_date) ON DUPLICATE KEY UPDATE delisting_date = delisting_date
-Row Count 963
-2026-10-01 02:51:16.538425 - Query
-INSERT IGNORE INTO stock_data VALUE (:stock_profile, :timestamp, :previous, :open_price, :first_trade, :high, :low, :close, :change, :volume, :value, :frequency, :index_individual, :offer, :offer_volume, :bid, :bid_volume, :listed_shares, :tradeble_shares, :weight_for_index, :foreign_sell, :foreign_buy, :non_regular_volume, :non_regular_value, :non_regular_frequency, :persen, :percentage)
-Row Count 963
-2026-10-01 02:51:16.546743 - Query
-INSERT IGNORE INTO currency_exchange_rates VALUES (:primary_code, :secondary_code, :primary_value, :secondary_value, :timestamp)
-Row Count 1
-2026-10-01 02:51:21.145820 - https://www.idx.co.id/primary/TradingSummary/GetIndexSummary?length=9999&start=0&date=20260930
-2026-10-01 02:51:21.206759 - https://www.idx.co.id/primary/TradingSummary/GetStockSummary?length=9999&start=0&date=20260930
-2026-10-01 02:51:21.652758 - https://api.frankfurter.dev/v1/2026-09-30..2026-09-30?base=USD&symbols=IDR
-2026-10-01 02:51:21.655604 - Query
-INSERT IGNORE INTO time_dimensions VALUES (:tm)
-Row Count 1
-2026-10-01 02:51:21.659407 - Query
-INSERT IGNORE INTO index_profiles (index_code) VALUE (:index_code)
-Row Count 0
-2026-10-01 02:51:21.662612 - Query
-INSERT IGNORE INTO index_data VALUE (:index_profile, :timestamp, :previous, :highest, :lowest, :close, :number_of_stock, :change, :volume, :value, :frequency, :market_capital)
-Row Count 45
-2026-10-01 02:51:21.672074 - Query
-INSERT INTO stock_profiles VALUE (:stock_code, :stock_name, :remarks, :delisting_date) ON DUPLICATE KEY UPDATE delisting_date = delisting_date
-Row Count 963
-2026-10-01 02:51:21.737262 - Query
-INSERT IGNORE INTO stock_data VALUE (:stock_profile, :timestamp, :previous, :open_price, :first_trade, :high, :low, :close, :change, :volume, :value, :frequency, :index_individual, :offer, :offer_volume, :bid, :bid_volume, :listed_shares, :tradeble_shares, :weight_for_index, :foreign_sell, :foreign_buy, :non_regular_volume, :non_regular_value, :non_regular_frequency, :persen, :percentage)
-Row Count 963
-2026-10-01 02:51:21.740596 - Query
-INSERT IGNORE INTO currency_exchange_rates VALUES (:primary_code, :secondary_code, :primary_value, :secondary_value, :timestamp)
-Row Count 1
-2026-10-01 02:51:24.733499 - Query
-SELECT * from index_profiles
-Row Count 46
-2026-10-01 02:51:24.960479 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=INFOBANK15&year=2026&table=stockIndex&locale=id
-2026-10-01 02:51:27.942817 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=IDXTRANS&year=2026&table=stockIndex&locale=id
-2026-10-01 02:51:31.934545 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=IDXQ30&year=2026&table=stockIndex&locale=id
-2026-10-01 02:51:36.132630 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=IDXNONCYC&year=2026&table=stockIndex&locale=id
-2026-10-01 02:51:38.652726 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=ECONOMIC30&year=2026&table=stockIndex&locale=id
-2026-10-01 02:51:42.837544 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=JII70&year=2026&table=stockIndex&locale=id
-2026-10-01 02:51:46.117330 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=IDXPROPERT&year=2026&table=stockIndex&locale=id
-2026-10-01 02:51:48.665570 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=IDXESGL&year=2026&table=stockIndex&locale=id
-2026-10-01 02:51:52.146348 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=PEFINDO25&year=2026&table=stockIndex&locale=id
-2026-10-01 02:51:54.566520 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=PEFINDO25&year=2025&table=stockIndex&locale=id
-2026-10-01 02:51:56.938686 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=PEFINDO25&year=2024&table=stockIndex&locale=id
-2026-10-01 02:51:59.083007 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=ISSI&year=2026&table=stockIndex&locale=id
-2026-10-01 02:52:02.414953 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=BISNIS-27&year=2026&table=stockIndex&locale=id
-2026-10-01 02:52:05.936299 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=I-GRADE&year=2026&table=stockIndex&locale=id
-2026-10-01 02:52:10.490588 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=IDXBASIC&year=2026&table=stockIndex&locale=id
-2026-10-01 02:52:14.012062 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=IDXINDUST&year=2026&table=stockIndex&locale=id
-2026-10-01 02:52:17.272439 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=IDXHIDIV20&year=2026&table=stockIndex&locale=id
-2026-10-01 02:52:20.940534 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=ESGSKEHATI&year=2026&table=stockIndex&locale=id
-2026-10-01 02:52:24.554229 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=IDXG30&year=2026&table=stockIndex&locale=id
-2026-10-01 02:52:28.024977 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=PRIMBANK10&year=2026&table=stockIndex&locale=id
-2026-10-01 02:52:32.385323 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=IDXLQ45LCL&year=2026&table=stockIndex&locale=id
-2026-10-01 02:52:35.740466 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=MNC36&year=2026&table=stockIndex&locale=id
-2026-10-01 02:52:39.416040 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=IDXV30&year=2026&table=stockIndex&locale=id
-2026-10-01 02:52:42.578027 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=SRI-KEHATI&year=2026&table=stockIndex&locale=id
-2026-10-01 02:52:45.575875 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=IDXSHAGROW&year=2026&table=stockIndex&locale=id
-2026-10-01 02:52:50.692777 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=IDXHEALTH&year=2026&table=stockIndex&locale=id
-2026-10-01 02:52:52.809377 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=IDXSMC-COM&year=2026&table=stockIndex&locale=id
-2026-10-01 02:52:54.927581 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=IDXBUMN20&year=2026&table=stockIndex&locale=id
-2026-10-01 02:52:59.182121 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=ABX&year=2026&table=stockIndex&locale=id
-2026-10-01 02:53:03.168996 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=IDXCYCLIC&year=2026&table=stockIndex&locale=id
-2026-10-01 02:53:07.638010 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=IDXTECHNO&year=2026&table=stockIndex&locale=id
-2026-10-01 02:53:11.480025 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=MBX&year=2026&table=stockIndex&locale=id
-2026-10-01 02:53:14.620886 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=DBX&year=2026&table=stockIndex&locale=id
-2026-10-01 02:53:17.509592 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=SMinfra18&year=2026&table=stockIndex&locale=id
-2026-10-01 02:53:21.040480 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=COMPOSITE&year=2026&table=stockIndex&locale=id
-2026-10-01 02:53:24.007565 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=IDX30&year=2026&table=stockIndex&locale=id
-2026-10-01 02:53:28.437676 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=IDXVESTA28&year=2026&table=stockIndex&locale=id
-2026-10-01 02:53:33.033229 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=Investor33&year=2026&table=stockIndex&locale=id
-2026-10-01 02:53:37.412728 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=KOMPAS100&year=2026&table=stockIndex&locale=id
-2026-10-01 02:53:40.997564 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=ESGQKEHATI&year=2026&table=stockIndex&locale=id
-2026-10-01 02:53:43.281429 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=LQ45&year=2026&table=stockIndex&locale=id
-2026-10-01 02:53:48.013456 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=IDXENERGY&year=2026&table=stockIndex&locale=id
-2026-10-01 02:53:52.332231 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=JII&year=2026&table=stockIndex&locale=id
-2026-10-01 02:53:55.783999 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=IDX80&year=2026&table=stockIndex&locale=id
-2026-10-01 02:53:59.622983 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=IDXFINANCE&year=2026&table=stockIndex&locale=id
-2026-10-01 02:54:02.138468 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=IDXINFRA&year=2026&table=stockIndex&locale=id
-2026-10-01 02:54:06.088791 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=IDXMESBUMN&year=2026&table=stockIndex&locale=id
-2026-10-01 02:54:10.210888 - https://idx.co.id/secondary/get/StockData/GetStockUploader?typeIndex=IDXSMC-LIQ&year=2026&table=stockIndex&locale=id
-2026-10-01 02:54:12.609614 - https://idx.co.id/StaticData/NewsAndAnnouncement/ANNOUNCEMENTSTOCK/Exchange/No.%20Peng-00151_BEI.POP_07-2026-ID.zip
-2026-10-01 02:54:12.610471 - Download https://idx.co.id/StaticData/NewsAndAnnouncement/ANNOUNCEMENTSTOCK/Exchange/No. Peng-00151_BEI.POP_07-2026-ID.zip
-2026-10-01 02:54:12.610716 - Extracting files https://idx.co.id/StaticData/NewsAndAnnouncement/ANNOUNCEMENTSTOCK/Exchange/No. Peng-00151_BEI.POP_07-2026-ID.zip
-2026-10-01 02:54:17.724840 - https://idx.co.id/StaticData/NewsAndAnnouncement/ANNOUNCEMENTSTOCK/Exchange/No.%20Peng-00160_BEI.POP_08-2026-ID.zip
-2026-10-01 02:54:17.726270 - Download https://idx.co.id/StaticData/NewsAndAnnouncement/ANNOUNCEMENTSTOCK/Exchange/No. Peng-00160_BEI.POP_08-2026-ID.zip
-2026-10-01 02:54:17.726523 - Extracting files https://idx.co.id/StaticData/NewsAndAnnouncement/ANNOUNCEMENTSTOCK/Exchange/No. Peng-00160_BEI.POP_08-2026-ID.zip
-2026-10-01 02:54:21.951664 - https://idx.co.id/StaticData/NewsAndAnnouncement/ANNOUNCEMENTSTOCK/Exchange/No.%20Peng-00148_BEI.POP_07-2026-ID.zip
-2026-10-01 02:54:21.953708 - Download https://idx.co.id/StaticData/NewsAndAnnouncement/ANNOUNCEMENTSTOCK/Exchange/No. Peng-00148_BEI.POP_07-2026-ID.zip
-2026-10-01 02:54:21.954193 - Extracting files https://idx.co.id/StaticData/NewsAndAnnouncement/ANNOUNCEMENTSTOCK/Exchange/No. Peng-00148_BEI.POP_07-2026-ID.zip
-2026-10-01 02:54:25.095283 - https://idx.co.id/StaticData/NewsAndAnnouncement/ANNOUNCEMENTSTOCK/Exchange/No.%20Peng-00067_BEI.POP_04-2026-ID.zip
-2026-10-01 02:54:25.096222 - Download https://idx.co.id/StaticData/NewsAndAnnouncement/ANNOUNCEMENTSTOCK/Exchange/No. Peng-00067_BEI.POP_04-2026-ID.zip
-2026-10-01 02:54:25.096567 - Extracting files https://idx.co.id/StaticData/NewsAndAnnouncement/ANNOUNCEMENTSTOCK/Exchange/No. Peng-00067_BEI.POP_04-2026-ID.zip
-2026-10-01 02:54:29.965017 - https://idx.co.id/media/mrzjm1so/20241026_evaluasi-indeks-idx30-lq45-idx80-kompas100-pefindo25-bisnis-27-mnc36-sminfra18.zip
-2026-10-01 02:54:29.966157 - Download https://idx.co.id/media/mrzjm1so/20241026_evaluasi-indeks-idx30-lq45-idx80-kompas100-pefindo25-bisnis-27-mnc36-sminfra18.zip
-2026-10-01 02:54:29.966447 - Extracting files https://idx.co.id/media/mrzjm1so/20241026_evaluasi-indeks-idx30-lq45-idx80-kompas100-pefindo25-bisnis-27-mnc36-sminfra18.zip
-2026-10-01 02:54:33.363812 - https://idx.co.id/StaticData/NewsAndAnnouncement/ANNOUNCEMENTSTOCK/Exchange/No.%20Peng-00177_BEI.POP_09-2026-ID.zip
-2026-10-01 02:54:33.365020 - Download https://idx.co.id/StaticData/NewsAndAnnouncement/ANNOUNCEMENTSTOCK/Exchange/No. Peng-00177_BEI.POP_09-2026-ID.zip
-2026-10-01 02:54:33.365315 - Extracting files https://idx.co.id/StaticData/NewsAndAnnouncement/ANNOUNCEMENTSTOCK/Exchange/No. Peng-00177_BEI.POP_09-2026-ID.zip
-2026-10-01 02:54:38.605986 - Query
-DELETE from index_stock
-Row Count 4626
-2026-10-01 02:54:38.740886 - Query
-INSERT IGNORE INTO index_stock VALUE (:index_code, :stock_code)
-Row Count 4638
-2026-10-01 02:54:38.845427 - SCRAPE END
-2026-10-01 02:54:38.847094 - START lgbm_rank_stock
-2026-10-01 02:54:38.854972 - Query
+2026-10-12 08:41:59.817596 - START
+2026-10-12 08:41:59.817922 - START lgbm_rank_stock
+2026-10-12 08:41:59.865705 - Query
 SET
     @HORIZON := 3
 Row Count 0
-2026-10-01 02:54:38.855776 - Query
+2026-10-12 08:41:59.866320 - Query
 SET
     @VAL_RATIO := 0.2
 Row Count 0
-2026-10-01 02:54:38.856228 - Query
+2026-10-12 08:41:59.866856 - Query
 SET
     @EPSILON := 0.00000001
 Row Count 0
-2026-10-01 02:54:38.856638 - Query
+2026-10-12 08:41:59.867340 - Query
 SET
     @INDEX_NAME := "IDX80"
 Row Count 0
-2026-10-01 02:54:38.867582 - Query
+2026-10-12 08:42:00.086063 - Query
 DELETE FROM
     stock_profiles
 WHERE
@@ -312,7 +36,7 @@ WHERE
             )
     )
 Row Count 0
-2026-10-01 02:54:38.893595 - Query
+2026-10-12 08:42:00.136517 - Query
 SELECT
     @MIN_DATE := MIN(timestamp)
 FROM
@@ -327,10 +51,10 @@ FROM
             500
     ) t
 Row Count 1
-2026-10-01 02:54:38.901884 - Query
+2026-10-12 08:42:00.140641 - Query
 DROP TABLE IF EXISTS market_base
 Row Count 0
-2026-10-01 02:54:38.977759 - Query
+2026-10-12 08:42:00.216004 - Query
 CREATE TEMPORARY TABLE market_base AS WITH index_base AS (
     SELECT
         timestamp,
@@ -436,11 +160,11 @@ FROM
     window_base
 WHERE
     idx_ret_60d IS NOT NULL
-Row Count 429
-2026-10-01 02:54:38.979754 - Query
+Row Count 428
+2026-10-12 08:42:00.218124 - Query
 DROP TABLE IF EXISTS stock_base
 Row Count 0
-2026-10-01 02:55:01.768929 - Query
+2026-10-12 08:42:23.561167 - Query
 CREATE TEMPORARY TABLE stock_base AS WITH base as (
     SELECT
         stock_profile,
@@ -639,11 +363,11 @@ WHERE
             filtered_stocks
     )
     AND wb.ret_60d IS NOT NULL
-Row Count 34062
-2026-10-01 02:55:01.773735 - Query
+Row Count 34003
+2026-10-12 08:42:23.565465 - Query
 DROP TABLE IF EXISTS model_target
 Row Count 0
-2026-10-01 02:55:02.917633 - Query
+2026-10-12 08:42:24.623977 - Query
 CREATE TEMPORARY TABLE model_target AS WITH base AS (
     SELECT
         stock_profile,
@@ -692,11 +416,11 @@ FROM
     ranked_base rb
 WHERE
     ROUND(total_step * @VAL_RATIO) > (@HORIZON + 1)
-Row Count 33822
-2026-10-01 02:55:02.920696 - Query
+Row Count 33763
+2026-10-12 08:42:24.626280 - Query
 DROP TABLE IF EXISTS stock_merged
 Row Count 0
-2026-10-01 02:55:05.623589 - Query
+2026-10-12 08:42:27.230468 - Query
 CREATE TEMPORARY TABLE stock_merged AS
 SELECT
     sb.*,
@@ -711,20 +435,20 @@ FROM
     stock_base sb
     INNER JOIN model_target mt ON sb.timestamp = mt.timestamp
     AND sb.stock_profile = mt.stock_profile
-Row Count 33822
-2026-10-01 02:55:05.665557 - Query
+Row Count 33763
+2026-10-12 08:42:27.275371 - Query
 SELECT
     @STOCK_RETURN_MIN_TOTAL_STEP := MIN(total_step)
 FROM
     stock_merged
 Row Count 1
-2026-10-01 02:55:05.759090 - Query
+2026-10-12 08:42:27.343415 - Query
 DROP TABLE IF EXISTS stock_train
 Row Count 0
-2026-10-01 02:55:05.761748 - Query
+2026-10-12 08:42:27.364680 - Query
 DROP TABLE IF EXISTS stock_val
 Row Count 0
-2026-10-01 02:55:07.953914 - Query
+2026-10-12 08:42:29.718980 - Query
 CREATE TABLE stock_train AS
 SELECT
     *
@@ -734,8 +458,8 @@ WHERE
     step_count > (
         ROUND(@STOCK_RETURN_MIN_TOTAL_STEP * @VAL_RATIO, 0) + @HORIZON + 1
     )
-Row Count 28222
-2026-10-01 02:55:08.611286 - Query
+Row Count 28003
+2026-10-12 08:42:30.468773 - Query
 CREATE TABLE stock_val AS
 SELECT
     *
@@ -743,11 +467,11 @@ FROM
     stock_merged
 WHERE
     step_count <= ROUND(@STOCK_RETURN_MIN_TOTAL_STEP * @VAL_RATIO, 0)
-Row Count 5280
-2026-10-01 02:55:08.612761 - Query
+Row Count 5440
+2026-10-12 08:42:30.482011 - Query
 DROP TABLE IF EXISTS stock_inference
 Row Count 0
-2026-10-01 02:55:10.711680 - Query
+2026-10-12 08:42:32.442067 - Query
 CREATE TABLE stock_inference AS WITH base AS (
     SELECT
         *,
@@ -767,26 +491,26 @@ FROM
 WHERE
     step_count = total_step
 Row Count 80
-2026-10-01 02:55:46.484648 - Query
+2026-10-12 08:43:09.104036 - Query
 DROP TABLE IF EXISTS market_base
 Row Count 0
-2026-10-01 02:55:46.487600 - Query
+2026-10-12 08:43:09.106667 - Query
 DROP TABLE IF EXISTS stock_base
 Row Count 0
-2026-10-01 02:55:46.488384 - Query
+2026-10-12 08:43:09.107632 - Query
 DROP TABLE IF EXISTS model_target
 Row Count 0
-2026-10-01 02:55:46.490876 - Query
+2026-10-12 08:43:09.110082 - Query
 DROP TABLE IF EXISTS stock_merged
 Row Count 0
-2026-10-01 02:55:46.513692 - Query
+2026-10-12 08:43:09.125733 - Query
 DROP TABLE IF EXISTS stock_train
 Row Count 0
-2026-10-01 02:55:46.531032 - Query
+2026-10-12 08:43:09.143915 - Query
 DROP TABLE IF EXISTS stock_val
 Row Count 0
-2026-10-01 02:55:46.543242 - Query
+2026-10-12 08:43:09.155625 - Query
 DROP TABLE IF EXISTS stock_inference
 Row Count 0
-2026-10-01 02:55:46.543866 - END lgbm_rank_stock
-2026-10-01 02:55:46.544165 - END
+2026-10-12 08:43:09.156260 - END lgbm_rank_stock
+2026-10-12 08:43:09.156576 - END

@@ -27,9 +27,6 @@ class __AppConfig:
     SCRAPE_INDEX_URL = "https://www.idx.co.id/primary/TradingSummary/GetIndexSummary"
     SCRAPE_STOCK_URL = "https://www.idx.co.id/primary/TradingSummary/GetStockSummary"
     SCRAPE_INDEX_STOCK_URL = "https://idx.co.id/secondary/get/StockData/GetStockUploader"
-    SCRAPE_HEADERS = {
-        "Referer": "https://www.idx.co.id/",
-    }
 
     def currency_exchange_rates_url(self, oldest_date: str, latest_date: str):
         return f"https://api.frankfurter.dev/v1/{oldest_date}..{latest_date}"
